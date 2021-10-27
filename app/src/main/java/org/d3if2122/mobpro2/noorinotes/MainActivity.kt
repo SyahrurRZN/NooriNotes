@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.d3if2122.mobpro2.noorinotes.Model.NotesAdapter
 import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityMainBinding
+import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter?.setOnClickItem {
             val intent = Intent(this, DetailNoteActivity::class.java)
-            intent.putExtra("id",it.id)
+            intent.putExtra("data",it as Serializable)
             startActivity(intent)
         }
 

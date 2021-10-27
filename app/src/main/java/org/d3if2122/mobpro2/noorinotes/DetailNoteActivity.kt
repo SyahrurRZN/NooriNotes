@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityDetailNoteBinding
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,40 +26,40 @@ class DetailNoteActivity : AppCompatActivity() {
         setContentView(rootView)
         sqLiteHelper = SQLiteHelper(this)
 
-        val data = intent.getStringExtra("id")
+        note = intent.getSerializableExtra("data") as Notes
 //        note = sqLiteHelper.getNote(data.toString())
 
 
-        setView(data.toString())
+        setView()
     }
 
-    private fun setView(ids:String) {
+    private fun setView() {
         val date = getCurrentDateTime()
         val dateInString = date.toString("dd/MM/yyyy HH:mm")
-        detailNoteBinding.tTanggal.text = dateInString
-        val cursor = sqLiteHelper.getNote(ids)
-
-        var id:Int
-        var judul:String
-        var isi:String
-        var urllink:String
-        var gambar:String
-        var tanggal:String
-
-        if (cursor!!.moveToFirst()){
-            do{
-                id = cursor.getInt(cursor.getColumnIndex("id"))
-                if(id.equals(ids)){
-                    judul = cursor.getString(cursor.getColumnIndex("judul"))
-                    isi = cursor.getString(cursor.getColumnIndex("isi"))
-                    urllink = cursor.getString(cursor.getColumnIndex("urllink"))
-                    gambar = cursor.getString(cursor.getColumnIndex("gambar"))
-                    tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
-
-                    note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
-                }
-            }while (cursor.moveToNext())
-        }
+//        detailNoteBinding.tTanggal.text = dateInString
+//        val cursor = sqLiteHelper.getNote(ids)
+//
+//        var id:Int
+//        var judul:String
+//        var isi:String
+//        var urllink:String
+//        var gambar:String
+//        var tanggal:String
+//
+//        if (cursor!!.moveToFirst()){
+//            do{
+//                id = cursor.getInt(cursor.getColumnIndex("id"))
+//                if(id.equals(ids)){
+//                    judul = cursor.getString(cursor.getColumnIndex("judul"))
+//                    isi = cursor.getString(cursor.getColumnIndex("isi"))
+//                    urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+//                    gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+//                    tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+//
+//                    note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+//                }
+//            }while (cursor.moveToNext())
+//        }
 
 
 
@@ -88,7 +89,7 @@ class DetailNoteActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.action_edit -> {
                 val intent = Intent(this, EditNoteActivity::class.java)
-                intent.putExtra("id",note.id)
+                intent.putExtra("data",note as Serializable)
                 startActivity(intent)
                 return true
             }

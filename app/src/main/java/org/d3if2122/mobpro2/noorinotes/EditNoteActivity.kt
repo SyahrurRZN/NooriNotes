@@ -22,36 +22,37 @@ class EditNoteActivity : AppCompatActivity() {
         setContentView(rootView)
         sqLiteHelper = SQLiteHelper(this)
 
-        val data =intent.getStringExtra("id")
+//        val data =intent.getStringExtra("id")
+        note = intent.getSerializableExtra("data") as Notes
 //        note = sqLiteHelper.getNote(data.toString())
-        setView(data.toString())
+        setView()
     }
 
-    private fun setView(ids:String) {
-        val cursor = sqLiteHelper.getNote(ids)
-
-        var id:Int
-        var judul:String
-        var isi:String
-        var urllink:String
-        var gambar:String
-        var tanggal:String
-
-        if (cursor!!.moveToFirst()){
-            do{
-                id = cursor.getInt(cursor.getColumnIndex("id"))
-                if(id.equals(ids)){
-                    judul = cursor.getString(cursor.getColumnIndex("judul"))
-                    isi = cursor.getString(cursor.getColumnIndex("isi"))
-                    urllink = cursor.getString(cursor.getColumnIndex("urllink"))
-                    gambar = cursor.getString(cursor.getColumnIndex("gambar"))
-                    tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
-
-                    note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
-                }
-            }while (cursor.moveToNext())
-        }
-        cursor.close()
+    private fun setView() {
+//        val cursor = sqLiteHelper.getNote(ids)
+//
+//        var id:Int
+//        var judul:String
+//        var isi:String
+//        var urllink:String
+//        var gambar:String
+//        var tanggal:String
+//
+//        if (cursor!!.moveToFirst()){
+//            do{
+//                id = cursor.getInt(cursor.getColumnIndex("id"))
+//                if(id.equals(ids)){
+//                    judul = cursor.getString(cursor.getColumnIndex("judul"))
+//                    isi = cursor.getString(cursor.getColumnIndex("isi"))
+//                    urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+//                    gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+//                    tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+//
+//                    note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+//                }
+//            }while (cursor.moveToNext())
+//        }
+//        cursor.close()
         editNoteBinding.eJudul.setText(note.judul)
         editNoteBinding.eIsi.setText(note.isi)
         editNoteBinding.eUrlLink.setText(note.urlLink)
