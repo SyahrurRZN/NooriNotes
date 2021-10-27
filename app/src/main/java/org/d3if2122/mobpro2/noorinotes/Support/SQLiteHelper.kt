@@ -1,4 +1,4 @@
-package org.d3if2122.mobpro2.noorinotes
+package org.d3if2122.mobpro2.noorinotes.Support
 
 import android.content.ContentValues
 import android.content.Context
@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import java.lang.Exception
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,DATABASE_NAME, null,DATABASE_VERSION) {
+class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
+    DATABASE_NAME, null,
+    DATABASE_VERSION
+) {
 
     companion object{
         private const val DATABASE_NAME="notes.db"
@@ -24,12 +27,12 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,DATABASE_NAME, n
     }
     override fun onCreate(db: SQLiteDatabase?) {
         val createTblNotes = ("CREATE TABLE "+ TBL_NOTES + "("
-                +ID+" INTEGER PRIMARY KEY, "
-                +JUDUL +" TEXT, "
-                +ISI+" TEXT, "
-                +URLLINK+ " TEXT, "
-                +GAMBAR+ " TEXT, "
-                + TANGGAL+ " TEXT)")
+                + ID +" INTEGER PRIMARY KEY, "
+                + JUDUL +" TEXT, "
+                + ISI +" TEXT, "
+                + URLLINK + " TEXT, "
+                + GAMBAR + " TEXT, "
+                + TANGGAL + " TEXT)")
         db?.execSQL(createTblNotes)
     }
 
@@ -91,5 +94,20 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,DATABASE_NAME, n
         }
 
         return noteList
+    }
+
+    fun updateNote(notes: Notes): Int{
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(ID,notes.id)
+        contentValues.put(JUDUL,notes.judul)
+        contentValues.put(ISI,notes.isi)
+        contentValues.put(URLLINK,notes.urlLink)
+        contentValues.put(GAMBAR,notes.gambar)
+        contentValues.put(TANGGAL,notes.tanggal)
+
+        val success = db.update(TBL_NOTES,contentValues,"id="+notes.id,null)
+        db.close()
+        return success
     }
 }

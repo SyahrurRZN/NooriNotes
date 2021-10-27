@@ -2,11 +2,15 @@ package org.d3if2122.mobpro2.noorinotes
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.d3if2122.mobpro2.noorinotes.Model.NotesAdapter
+import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var sqLiteHelper: SQLiteHelper
+    private var adapter: NotesAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,9 +21,17 @@ class MainActivity : AppCompatActivity() {
         sqLiteHelper = SQLiteHelper(this)
 
         getView()
+
+        activityMainBinding.recycleview.layoutManager = LinearLayoutManager(this)
+        adapter = NotesAdapter()
+        activityMainBinding.recycleview.adapter = adapter
+
+        adapter?.setOnClickItem {  }
     }
 
     private fun getView() {
         val noteList = sqLiteHelper.getAllNote()
+
+        adapter?.addItems(noteList)
     }
 }

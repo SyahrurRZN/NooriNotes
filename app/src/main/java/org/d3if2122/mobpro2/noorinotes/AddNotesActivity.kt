@@ -6,10 +6,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
+import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityAddNotesBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class AddNotesActivity : AppCompatActivity() {
@@ -70,10 +69,12 @@ class AddNotesActivity : AppCompatActivity() {
             if(status>-1){
                 Toast.makeText(this, "Note ditambahkan", Toast.LENGTH_SHORT).show()
                 finish()
+                //TODO: belum untuk result activity
             }
             else{
                 Toast.makeText(this, "Tidak tersimpan", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 }
