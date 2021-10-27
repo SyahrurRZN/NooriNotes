@@ -110,4 +110,48 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
         db.close()
         return success
     }
+
+    fun getNote(id:String):Notes{
+        val db = this.readableDatabase
+        var note:Notes? = null
+        val selectQuery = "SELECT * FROM $TBL_NOTES WHERE ID=$id"
+
+        val cursor:Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery,null)
+        }catch (e:Exception){
+            e.printStackTrace()
+            db.execSQL(selectQuery)
+            note = Notes()
+            return note
+        }
+
+        var id:Int
+        var judul:String
+        var isi:String
+        var urllink:String
+        var gambar:String
+        var tanggal:String
+
+        id = cursor.getInt(cursor.getColumnIndex("id"))
+        judul = cursor.getString(cursor.getColumnIndex("judul"))
+        isi = cursor.getString(cursor.getColumnIndex("isi"))
+        urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+        gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+        tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+
+        note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+        return note
+    }
+
+    fun deleteNote(id: Int): Int{
+        val db  = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(ID,id)
+
+        val success = db.delete(TBL_NOTES,"id=$id",null)
+        db.close()
+        return success
+    }
 }

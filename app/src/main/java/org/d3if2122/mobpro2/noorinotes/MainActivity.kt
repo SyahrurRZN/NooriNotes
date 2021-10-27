@@ -1,5 +1,6 @@
 package org.d3if2122.mobpro2.noorinotes
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,15 @@ class MainActivity : AppCompatActivity() {
         adapter = NotesAdapter()
         activityMainBinding.recycleview.adapter = adapter
 
-        adapter?.setOnClickItem {  }
+        adapter?.setOnClickItem {
+            val intent = Intent(this, DetailNoteActivity::class.java)
+            intent.putExtra("id",it.id)
+            startActivity(intent)
+        }
+
+        activityMainBinding.fab.setOnClickListener{
+            //TODO:kurang tambah
+        }
     }
 
     private fun getView() {

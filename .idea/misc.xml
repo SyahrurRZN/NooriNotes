@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/NooriNotes/app/src/main/res/layout/activity_add_notes.xml" value="0.264" />
+        <entry key="..\:/NooriNotes/app/src/main/res/layout/activity_detail_note.xml" value="0.4" />
+        <entry key="..\:/NooriNotes/app/src/main/res/layout/activity_edit_note.xml" value="0.24603174603174602" />
         <entry key="..\:/NooriNotes/app/src/main/res/layout/activity_main.xml" value="0.136" />
         <entry key="..\:/NooriNotes/app/src/main/res/layout/notes_item_list.xml" value="0.1" />
         <entry key="..\:/NooriNotes/app/src/main/res/menu/menu_add.xml" value="0.25" />
