@@ -2,10 +2,15 @@ package org.d3if2122.mobpro2.noorinotes
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import org.d3if2122.mobpro2.noorinotes.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var activityMainBinding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        val rootView = activityMainBinding.root
+        setContentView(rootView)
     }
 }
