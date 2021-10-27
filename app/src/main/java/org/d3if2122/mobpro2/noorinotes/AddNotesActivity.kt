@@ -1,5 +1,7 @@
 package org.d3if2122.mobpro2.noorinotes
 
+import android.app.Activity
+import android.app.Instrumentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -67,9 +69,9 @@ class AddNotesActivity : AppCompatActivity() {
             val note = Notes(judul = judul,isi = isi,urlLink = urlLink, gambar = gambar,tanggal = tanggal)
             val status = sqLiteHelper.insertNote(note)
             if(status>-1){
+                setResult(Activity.RESULT_OK)
                 Toast.makeText(this, "Note ditambahkan", Toast.LENGTH_SHORT).show()
                 finish()
-                //TODO: belum untuk result activity
             }
             else{
                 Toast.makeText(this, "Tidak tersimpan", Toast.LENGTH_SHORT).show()

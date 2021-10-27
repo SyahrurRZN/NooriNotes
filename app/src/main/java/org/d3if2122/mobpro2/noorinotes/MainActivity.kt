@@ -1,8 +1,13 @@
 package org.d3if2122.mobpro2.noorinotes
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.d3if2122.mobpro2.noorinotes.Model.NotesAdapter
 import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
@@ -21,6 +26,12 @@ class MainActivity : AppCompatActivity() {
 
         sqLiteHelper = SQLiteHelper(this)
 
+        val addNoteBaru = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode  == Activity.RESULT_OK){
+                getView()
+            }
+        }
+
         getView()
 
         activityMainBinding.recycleview.layoutManager = LinearLayoutManager(this)
@@ -34,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         activityMainBinding.fab.setOnClickListener{
-            //TODO:kurang tambah
+            addNoteBaru.launch(Intent(this,AddNotesActivity::class.java))
         }
     }
 

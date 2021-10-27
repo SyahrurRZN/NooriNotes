@@ -134,15 +134,20 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
         var gambar:String
         var tanggal:String
 
-        id = cursor.getInt(cursor.getColumnIndex("id"))
-        judul = cursor.getString(cursor.getColumnIndex("judul"))
-        isi = cursor.getString(cursor.getColumnIndex("isi"))
-        urllink = cursor.getString(cursor.getColumnIndex("urllink"))
-        gambar = cursor.getString(cursor.getColumnIndex("gambar"))
-        tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
 
-        note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
-        return note
+        if(cursor.moveToFirst()){
+            do{
+                id = cursor.getInt(cursor.getColumnIndex("id"))
+                judul = cursor.getString(cursor.getColumnIndex("judul"))
+                isi = cursor.getString(cursor.getColumnIndex("isi"))
+                urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+                gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+                tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+
+                note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+            }while (cursor.moveToNext())
+        }
+        return note!!
     }
 
     fun deleteNote(id: Int): Int{
