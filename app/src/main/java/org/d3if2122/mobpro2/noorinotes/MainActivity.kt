@@ -15,5 +15,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(rootView)
 
         sqLiteHelper = SQLiteHelper(this)
+
+        getView()
+    }
+
+    private fun getView() {
+        val noteList = sqLiteHelper.getAllNote()
     }
 }
