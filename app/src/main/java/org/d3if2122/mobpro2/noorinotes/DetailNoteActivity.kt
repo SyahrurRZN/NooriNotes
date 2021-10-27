@@ -26,15 +26,41 @@ class DetailNoteActivity : AppCompatActivity() {
         sqLiteHelper = SQLiteHelper(this)
 
         val data = intent.getStringExtra("id")
-        note = sqLiteHelper.getNote(data.toString())
+//        note = sqLiteHelper.getNote(data.toString())
 
-        setView()
+
+        setView(data.toString())
     }
 
-    private fun setView() {
+    private fun setView(ids:String) {
         val date = getCurrentDateTime()
         val dateInString = date.toString("dd/MM/yyyy HH:mm")
         detailNoteBinding.tTanggal.text = dateInString
+        val cursor = sqLiteHelper.getNote(ids)
+
+        var id:Int
+        var judul:String
+        var isi:String
+        var urllink:String
+        var gambar:String
+        var tanggal:String
+
+        if (cursor!!.moveToFirst()){
+            do{
+                id = cursor.getInt(cursor.getColumnIndex("id"))
+                if(id.equals(ids)){
+                    judul = cursor.getString(cursor.getColumnIndex("judul"))
+                    isi = cursor.getString(cursor.getColumnIndex("isi"))
+                    urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+                    gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+                    tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+
+                    note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+                }
+            }while (cursor.moveToNext())
+        }
+
+
 
         Glide.with(this).load(note.gambar).into(detailNoteBinding.tGambar)
         detailNoteBinding.tJudul.text = note.judul

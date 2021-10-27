@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        getView()
 
         activityMainBinding.recycleview.layoutManager = LinearLayoutManager(this)
         adapter = NotesAdapter()
@@ -47,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         activityMainBinding.fab.setOnClickListener{
             addNoteBaru.launch(Intent(this,AddNotesActivity::class.java))
         }
+        getView()
     }
 
     private fun getView() {

@@ -92,7 +92,6 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
                 noteList.add(note)
             }while (cursor.moveToNext())
         }
-
         return noteList
     }
 
@@ -111,43 +110,36 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
         return success
     }
 
-    fun getNote(id:String):Notes{
+    fun getNote(id:String):Cursor?{
         val db = this.readableDatabase
-        var note:Notes? = null
-        val selectQuery = "SELECT * FROM $TBL_NOTES WHERE ID=$id"
+        val selectQuery = "SELECT * FROM $TBL_NOTES"
 
         val cursor:Cursor?
 
-        try {
-            cursor = db.rawQuery(selectQuery,null)
-        }catch (e:Exception){
-            e.printStackTrace()
-            db.execSQL(selectQuery)
-            note = Notes()
-            return note
-        }
+        cursor = db.rawQuery(selectQuery,null)
 
-        var id:Int
-        var judul:String
-        var isi:String
-        var urllink:String
-        var gambar:String
-        var tanggal:String
+//        var id:Int
+//        var judul:String
+//        var isi:String
+//        var urllink:String
+//        var gambar:String
+//        var tanggal:String
+//
+//
+//        if(cursor.moveToFirst()){
+//            do{
+//                id = cursor.getInt(cursor.getColumnIndex("id"))
+//                judul = cursor.getString(cursor.getColumnIndex("judul"))
+//                isi = cursor.getString(cursor.getColumnIndex("isi"))
+//                urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+//                gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+//                tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+//
+//                note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+//            }while (cursor.moveToNext())
+//        }
 
-
-        if(cursor.moveToFirst()){
-            do{
-                id = cursor.getInt(cursor.getColumnIndex("id"))
-                judul = cursor.getString(cursor.getColumnIndex("judul"))
-                isi = cursor.getString(cursor.getColumnIndex("isi"))
-                urllink = cursor.getString(cursor.getColumnIndex("urllink"))
-                gambar = cursor.getString(cursor.getColumnIndex("gambar"))
-                tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
-
-                note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
-            }while (cursor.moveToNext())
-        }
-        return note!!
+        return cursor
     }
 
     fun deleteNote(id: Int): Int{
