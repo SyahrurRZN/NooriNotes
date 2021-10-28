@@ -14,8 +14,6 @@ Aplikasi Noori adalah aplikasi untuk mencatat jadwal aktivitas keseharian dan da
 
 •	Menambah catatan jadwal
 
-•	Mengedit jadwal
-
-•	Mengirim notifikasi
-
 ![screnapp](https://user-images.githubusercontent.com/58241740/139262095-a21dce42-4e8e-48a4-a63f-2b486e55284f.PNG)
+
+https://drive.google.com/drive/folders/165cDD-XVQOk7p5j3NW_rLCPQnmYTV-M8?usp=sharing
