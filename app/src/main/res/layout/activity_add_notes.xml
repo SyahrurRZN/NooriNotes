@@ -46,19 +46,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Link"/>
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gambar"
-        android:textColor="@color/black"/>
-    <EditText
-        android:inputType="text"
-        android:id="@+id/eGambar"
-        android:layout_marginTop="6dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Judul"/>
+
+<!--    <EditText-->
+<!--        android:inputType="text"-->
+<!--        android:id="@+id/eGambar"-->
+<!--        android:layout_marginTop="6dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Gambar"/>-->
+    <ImageView
+        android:id="@+id/iGambar"
+        android:layout_marginTop="10dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/ic_baseline_add_a_photo_24"
+        android:layout_gravity="center_horizontal"/>
     <TextView
         android:layout_marginTop="20dp"
         android:id="@+id/tTanggal"

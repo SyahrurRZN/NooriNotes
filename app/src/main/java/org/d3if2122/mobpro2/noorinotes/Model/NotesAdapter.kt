@@ -1,5 +1,6 @@
 package org.d3if2122.mobpro2.noorinotes.Model
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.d3if2122.mobpro2.noorinotes.R
 
-class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
-    private var noteList: ArrayList<Notes> = ArrayList()
+class NotesAdapter() : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
+    private var noteList: ArrayList<Notes>? = null
     private var onClickItem:((Notes) -> Unit)? = null
+
+    private var context: Context?=null
+
+    constructor(context: Context, noteList: ArrayList<Notes>?) : this(){
+        this.context = context
+        this.noteList = noteList
+    }
 
     fun addItems(items : ArrayList<Notes>){
         this.noteList = items
@@ -27,13 +35,13 @@ class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
     )
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        var note = noteList[position]
+        var note = noteList!!.get(position)
         holder.bindView(note)
         holder.itemView.setOnClickListener{onClickItem?.invoke(note)}
     }
 
     override fun getItemCount(): Int {
-        return noteList.size
+        return noteList!!.size
     }
 
     class NotesViewHolder(var view: View): RecyclerView.ViewHolder(view){

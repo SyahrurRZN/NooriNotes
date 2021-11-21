@@ -8,36 +8,24 @@ import android.database.sqlite.SQLiteOpenHelper
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import java.lang.Exception
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
-    DATABASE_NAME, null,
-    DATABASE_VERSION
+class SQLiteHelper(context: Context?) : SQLiteOpenHelper(context,
+    Constants.DATABASE_NAME,
+    null,
+    Constants.DATABASE_VERSION
 ) {
-
-    companion object{
-        private const val DATABASE_NAME="notes.db"
-        private const val DATABASE_VERSION = 1
-        private const val TBL_NOTES = "tbl_note"
-        private const val ID = "id"
-        private const val JUDUL = "judul"
-        private const val ISI = "isi"
-        private const val URLLINK = "urllink"
-        private const val GAMBAR = "gambar"
-        private const val TANGGAL = "tanggal"
-
-    }
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTblNotes = ("CREATE TABLE "+ TBL_NOTES + "("
-                + ID +" INTEGER PRIMARY KEY, "
-                + JUDUL +" TEXT, "
-                + ISI +" TEXT, "
-                + URLLINK + " TEXT, "
-                + GAMBAR + " TEXT, "
-                + TANGGAL + " TEXT)")
-        db?.execSQL(createTblNotes)
+//        val createTblNotes = ("CREATE TABLE "+ TBL_NOTES + " ("
+//                + ID +" INTEGER PRIMARY KEY, "
+//                + JUDUL +" TEXT, "
+//                + ISI +" TEXT, "
+//                + URLLINK + " TEXT, "
+//                + GAMBAR + " TEXT, "
+//                + TANGGAL + " TEXT);")
+        db!!.execSQL(Constants.CREATE_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS $TBL_NOTES")
+        db!!.execSQL("DROP TABLE IF EXISTS "+Constants.TBL_NOTES)
         onCreate(db)
     }
 
@@ -45,21 +33,20 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(ID,notes.id)
-        contentValues.put(JUDUL,notes.judul)
-        contentValues.put(ISI,notes.isi)
-        contentValues.put(URLLINK,notes.urlLink)
-        contentValues.put(GAMBAR,notes.gambar)
-        contentValues.put(TANGGAL,notes.tanggal)
+        contentValues.put(Constants.JUDUL,notes.judul)
+        contentValues.put(Constants.ISI,notes.isi)
+        contentValues.put(Constants.URLLINK,notes.urlLink)
+        contentValues.put(Constants.GAMBAR,notes.gambar)
+        contentValues.put(Constants.TANGGAL,notes.tanggal)
 
-        val success = db.insert(TBL_NOTES, null, contentValues)
+        val success = db.insert(Constants.TBL_NOTES, null, contentValues)
         db.close()
         return success
     }
 
     fun getAllNote():ArrayList<Notes>{
         val noteList: ArrayList<Notes> = ArrayList()
-        val selectQuery = "SELECT * FROM $TBL_NOTES"
+        val selectQuery = "SELECT * FROM ${Constants.TBL_NOTES}"
         val db = this.readableDatabase
 
         val cursor:Cursor?
@@ -72,7 +59,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
             return ArrayList()
         }
 
-        var id:Int
+        var id:String
         var judul:String
         var isi:String
         var urllink:String
@@ -81,7 +68,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
 
         if(cursor.moveToFirst()){
             do {
-                id = cursor.getInt(cursor.getColumnIndex("id"))
+                id = cursor.getInt(cursor.getColumnIndex("id")).toString()
                 judul = cursor.getString(cursor.getColumnIndex("judul"))
                 isi = cursor.getString(cursor.getColumnIndex("isi"))
                 urllink = cursor.getString(cursor.getColumnIndex("urllink"))
@@ -110,36 +97,42 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context,
         return success
     }
 
-    fun getNote(id:String):Cursor?{
+    fun getNote(query:String):ArrayList<Notes>{
+        val noteList: ArrayList<Notes> = ArrayList()
+        val selectQuery = "SELECT * FROM ${Constants.TBL_NOTES} WHERE ${Constants.JUDUL} LIKE '% $query%'"
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM $TBL_NOTES"
 
         val cursor:Cursor?
 
-        cursor = db.rawQuery(selectQuery,null)
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        }catch (e: Exception){
+            e.printStackTrace()
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
 
-//        var id:Int
-//        var judul:String
-//        var isi:String
-//        var urllink:String
-//        var gambar:String
-//        var tanggal:String
-//
-//
-//        if(cursor.moveToFirst()){
-//            do{
-//                id = cursor.getInt(cursor.getColumnIndex("id"))
-//                judul = cursor.getString(cursor.getColumnIndex("judul"))
-//                isi = cursor.getString(cursor.getColumnIndex("isi"))
-//                urllink = cursor.getString(cursor.getColumnIndex("urllink"))
-//                gambar = cursor.getString(cursor.getColumnIndex("gambar"))
-//                tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
-//
-//                note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
-//            }while (cursor.moveToNext())
-//        }
+        var id:String
+        var judul:String
+        var isi:String
+        var urllink:String
+        var gambar:String
+        var tanggal:String
 
-        return cursor
+        if(cursor.moveToFirst()){
+            do {
+                id = cursor.getInt(cursor.getColumnIndex("id")).toString()
+                judul = cursor.getString(cursor.getColumnIndex("judul"))
+                isi = cursor.getString(cursor.getColumnIndex("isi"))
+                urllink = cursor.getString(cursor.getColumnIndex("urllink"))
+                gambar = cursor.getString(cursor.getColumnIndex("gambar"))
+                tanggal = cursor.getString(cursor.getColumnIndex("tanggal"))
+
+                val note = Notes(id = id, judul = judul, isi = isi, urlLink =  urllink, gambar = gambar, tanggal = tanggal)
+                noteList.add(note)
+            }while (cursor.moveToNext())
+        }
+        return noteList
     }
 
     fun deleteNote(id: Int): Int{
