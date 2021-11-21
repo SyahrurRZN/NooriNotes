@@ -85,14 +85,14 @@ class SQLiteHelper(context: Context?) : SQLiteOpenHelper(context,
     fun updateNote(notes: Notes): Int{
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(ID,notes.id)
-        contentValues.put(JUDUL,notes.judul)
-        contentValues.put(ISI,notes.isi)
-        contentValues.put(URLLINK,notes.urlLink)
-        contentValues.put(GAMBAR,notes.gambar)
-        contentValues.put(TANGGAL,notes.tanggal)
+        contentValues.put(Constants.ID,notes.id)
+        contentValues.put(Constants.JUDUL,notes.judul)
+        contentValues.put(Constants.ISI,notes.isi)
+        contentValues.put(Constants.URLLINK,notes.urlLink)
+        contentValues.put(Constants.GAMBAR,notes.gambar)
+        contentValues.put(Constants.TANGGAL,notes.tanggal)
 
-        val success = db.update(TBL_NOTES,contentValues,"id="+notes.id,null)
+        val success = db.update(Constants.TBL_NOTES,contentValues,"id="+notes.id,null)
         db.close()
         return success
     }
@@ -135,12 +135,12 @@ class SQLiteHelper(context: Context?) : SQLiteOpenHelper(context,
         return noteList
     }
 
-    fun deleteNote(id: Int): Int{
+    fun deleteNote(id: String): Int{
         val db  = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(ID,id)
+        contentValues.put(Constants.ID,id)
 
-        val success = db.delete(TBL_NOTES,"id=$id",null)
+        val success = db.delete(Constants.TBL_NOTES,"id=$id",null)
         db.close()
         return success
     }
