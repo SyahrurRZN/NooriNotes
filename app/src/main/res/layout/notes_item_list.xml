@@ -6,16 +6,11 @@
     android:gravity="center_vertical"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/fotoNotes"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:src="@drawable/ic_baseline_image_24"/>
     <LinearLayout
+        android:id="@+id/tempatClick"
         android:paddingLeft="8dp"
         android:layout_width="0dp"
-        android:layout_weight="4"
+        android:layout_weight="6"
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
@@ -32,4 +27,18 @@
             android:text="Tanggal"
             android:textAppearance="@android:style/TextAppearance.Small"/>
     </LinearLayout>
+    <ImageView
+        android:layout_margin="8dp"
+        android:id="@+id/iEdit"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_baseline_edit_24"/>
+    <ImageView
+        android:layout_margin="8dp"
+        android:id="@+id/iDelete"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_baseline_delete_24"/>
 </LinearLayout>

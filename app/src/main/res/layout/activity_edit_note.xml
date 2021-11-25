@@ -1,64 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:orientation="vertical"
     tools:context=".EditNoteActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Judul"
-        android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/iGambar"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_add_a_photo_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
-        android:inputType="text"
         android:id="@+id/eJudul"
-        android:layout_marginTop="6dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Judul"/>
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Isi"
-        android:textColor="@color/black"/>
-    <EditText
+        android:hint="Judul"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iGambar" />
+
+    <EditText
+        android:layout_marginTop="16dp"
         android:id="@+id/eIsi"
-        android:layout_marginTop="6dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Isi Note"/>
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Link"
-        android:textColor="@color/black"/>
+        android:gravity="top"
+        android:hint="Tulis Catatan"
+        android:minLines="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eJudul" />
+
     <EditText
-        android:inputType="text"
+        android:layout_marginTop="16dp"
         android:id="@+id/eUrlLink"
-        android:layout_marginTop="6dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Link"/>
-    <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gambar"
-        android:textColor="@color/black"/>
-    <EditText
+        android:hint="Link"
         android:inputType="text"
-        android:id="@+id/eGambar"
-        android:layout_marginTop="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eIsi" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:id="@+id/tTanggal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Foto"/>
+        android:text="Tanggal"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eUrlLink" />
 
-
-</LinearLayout>
+    <Button
+        android:id="@+id/buttonTambah"
+        android:text="Tambah"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tTanggal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"/>
+    <Button
+        android:id="@+id/buttonUpdate"
+        android:text="Edit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonTambah"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

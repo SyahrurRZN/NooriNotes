@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
-import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
+//import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityAddNotesBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +27,7 @@ import java.util.jar.Manifest
 
 class AddNotesActivity : AppCompatActivity() {
     private lateinit var addNotesBinding: ActivityAddNotesBinding
-    private lateinit var sqLiteHelper: SQLiteHelper
+//    private lateinit var sqLiteHelper: SQLiteHelper
     private val CAMERA_REQUEST_CODE=100
     private val STORAGE_REQUEST_CODE=101
 
@@ -50,7 +50,7 @@ class AddNotesActivity : AppCompatActivity() {
         actionBar!!.title="Add Notes"
         actionBar.setDisplayShowHomeEnabled(true)
         actionBar.setDisplayHomeAsUpEnabled(true)
-        sqLiteHelper = SQLiteHelper(this)
+//        sqLiteHelper = SQLiteHelper(this)
 
         val date = getCurrentDateTime()
         val dateInString = date.toString("dd/MM/yyyy HH:mm")
@@ -260,16 +260,16 @@ class AddNotesActivity : AppCompatActivity() {
         if(judul.isEmpty() || isi.isEmpty()){
             Toast.makeText(this,"Isi data yang diperlukan",Toast.LENGTH_SHORT).show()
         }else{
-            val note = Notes(judul = judul,isi = isi,urlLink = urlLink, gambar = imageUri.toString(),tanggal = tanggal)
-            val status = sqLiteHelper.insertNote(note)
-            if(status>-1){
-                setResult(Activity.RESULT_OK)
-                Toast.makeText(this, "Note ditambahkan", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-            else{
-                Toast.makeText(this, "Tidak tersimpan", Toast.LENGTH_SHORT).show()
-            }
+//            val note = Notes(id="", judul = judul,isi = isi,urlLink = urlLink, gambar = imageUri.toString(),tanggal = tanggal)
+//            val status = sqLiteHelper.insertNote(note)
+//            if(status>-1){
+//                setResult(Activity.RESULT_OK)
+//                Toast.makeText(this, "Note ditambahkan", Toast.LENGTH_SHORT).show()
+//                finish()
+//            }
+//            else{
+//                Toast.makeText(this, "Tidak tersimpan", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 

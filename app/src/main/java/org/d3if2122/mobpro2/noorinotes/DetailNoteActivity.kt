@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
-import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
+//import org.d3if2122.mobpro2.noorinotes.Support.SQLiteHelper
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityDetailNoteBinding
 import java.io.Serializable
 import java.text.SimpleDateFormat
@@ -17,14 +17,14 @@ import java.util.*
 class DetailNoteActivity : AppCompatActivity() {
     private lateinit var detailNoteBinding: ActivityDetailNoteBinding
     private lateinit var note:Notes
-    private lateinit var sqLiteHelper: SQLiteHelper
+//    private lateinit var sqLiteHelper: SQLiteHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         detailNoteBinding = ActivityDetailNoteBinding.inflate(layoutInflater)
         val rootView = detailNoteBinding.root
         setContentView(rootView)
-        sqLiteHelper = SQLiteHelper(this)
+//        sqLiteHelper = SQLiteHelper(this)
 
         note = intent.getSerializableExtra("data") as Notes
 //        note = sqLiteHelper.getNote(data.toString())
@@ -106,7 +106,7 @@ class DetailNoteActivity : AppCompatActivity() {
         builder.setMessage("Apakah benar ingin menghapus note ini?")
         builder.setCancelable(true)
         builder.setPositiveButton("Yes"){ dialog, _ ->
-            sqLiteHelper.deleteNote(note.id)
+//            sqLiteHelper.deleteNote(note.id)
             dialog.dismiss()
             finish()
         }

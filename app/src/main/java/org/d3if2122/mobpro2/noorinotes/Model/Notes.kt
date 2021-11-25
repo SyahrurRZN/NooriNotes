@@ -1,12 +1,15 @@
 package org.d3if2122.mobpro2.noorinotes.Model
 
-import java.util.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class Notes(
-    var id: String,
-    var judul: String="",
-    var isi: String="",
-    var urlLink: String="",
-    var gambar: String="",
-    var tanggal: String=""
+@Entity
+class Notes(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val judul: String,
+    val isi: String,
+    val urlLink: String,
+    val gambar: String,
+    val tanggal: String
 )
