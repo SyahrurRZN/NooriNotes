@@ -3,11 +3,12 @@ package org.d3if2122.mobpro2.noorinotes
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import kotlinx.android.synthetic.main.activity_edit_note.*
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ class EditNoteActivity : AppCompatActivity() {
     private lateinit var editNoteBinding: ActivityEditNoteBinding
     private val db by lazy { NotesDB(this) }
     private var noteId =0
+    private var notegambar=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,12 +116,19 @@ class EditNoteActivity : AppCompatActivity() {
             editNoteBinding.eIsi.setText(selectedNote.isi)
             editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
             editNoteBinding.tTanggal.setText(selectedNote.tanggal)
-//            Glide.with(applicationContext)
-//                .load(Uri.parse(selectedNote.gambar))
-//                .apply(RequestOptions()
-//                    .placeholder(R.drawable.ic_baseline_image_24)
-//                    .error(R.drawable.ic_baseline_broken_image_24))
-//                .into(iGambar)
+            notegambar = selectedNote.gambar
+            loadGambar(selectedNote.gambar)
+        }
+    }
+
+    private fun loadGambar(gambar: String) {
+        Log.d("EditActivity","gambar : ${gambar}")
+        runOnUiThread{
+            Picasso.get()
+                .load(Uri.parse(gambar))
+                .placeholder(R.drawable.ic_baseline_image_24)
+                .error(R.drawable.ic_baseline_broken_image_24)
+                .into(editNoteBinding.iGambar)
         }
     }
 
