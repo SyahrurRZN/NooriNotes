@@ -257,16 +257,7 @@ class EditNoteActivity : AppCompatActivity() {
     fun getDateKosongan():Date{
         val formater = SimpleDateFormat(Constants.sdf)
         if(!dateAwal.isEmpty()){
-            val daw = formater.parse(dateAwal)
-            val dak = formater.parse(dateAkhir)
-            val dnow = Calendar.getInstance().time
-            if(dnow.after(daw) && dnow.before(dak)){
-                return dnow
-            }
-            else{
-                return getCurrentDateTime()
-            }
-
+            return formater.parse(dateAwal)
         }
         else{
             return getCurrentDateTime()

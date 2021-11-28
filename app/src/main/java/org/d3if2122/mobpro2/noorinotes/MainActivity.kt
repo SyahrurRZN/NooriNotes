@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(rootView)
 
         setupCalendar()
-        setupListener()
+//        setupListener()
     }
 
     private fun setupListener() {

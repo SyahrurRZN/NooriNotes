@@ -34,6 +34,7 @@ class DayListNotesActivity : AppCompatActivity() {
         setContentView(rootView)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         setupListener()
         setupRecyclerView()
@@ -108,6 +109,9 @@ class DayListNotesActivity : AppCompatActivity() {
         val akhirBanget = formatter.parse(dateAkhir)
         CoroutineScope(Dispatchers.IO).launch {
             val allnotes = db.notesDao().getAllNotesbyDay(awalBanget,akhirBanget)
+            val allnotes2 = db.notesDao().getAllNotes()
+            Log.d("DaylistNote","data : $allnotes")
+            Log.d("DaylistNote","data2 : $allnotes2")
             withContext(Dispatchers.Main){
                 notesAdapter.setData(allnotes)
             }
