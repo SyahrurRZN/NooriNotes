@@ -11,8 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.squareup.picasso.Picasso
 import com.swein.easypermissionmanager.EasyPermissionManager
 import kotlinx.coroutines.CoroutineScope
@@ -30,11 +28,13 @@ class EditNoteActivity : AppCompatActivity() {
     private lateinit var editNoteBinding: ActivityEditNoteBinding
     private val db by lazy { NotesDB(this) }
     private var noteId =0
-    private var notegambar=""
     private var pilihUri: Uri? =null
     private var tempUri: Uri? =null
     private var imagepathtemp = ""
     private var readNote = false
+    private var dateAwal =""
+    private var dateAkhir =""
+    private var dateTamppung:Date? = null
 
     private val easyPermissionManager = EasyPermissionManager(this)
 
@@ -46,6 +46,12 @@ class EditNoteActivity : AppCompatActivity() {
 
         setView()
         setListener()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dateAwal= intent.getStringExtra("awal").toString()
+        dateAkhir= intent.getStringExtra("akhir").toString()
     }
 
     private fun setListener() {
@@ -64,7 +70,8 @@ class EditNoteActivity : AppCompatActivity() {
                             editNoteBinding.eIsi.text.toString(),
                             editNoteBinding.eUrlLink.text.toString(),
                             imagepathtemp,
-                            editNoteBinding.tTanggal.text.toString()
+                            getDateKosongan(),
+                            getCurrentDateTime()
                         )
                     )
                     finish()
@@ -85,8 +92,9 @@ class EditNoteActivity : AppCompatActivity() {
                             editNoteBinding.eJudul.text.toString(),
                             editNoteBinding.eIsi.text.toString(),
                             editNoteBinding.eUrlLink.text.toString(),
-                            imagepathtemp,//TODO:belum
-                            editNoteBinding.tTanggal.text.toString()
+                            imagepathtemp,
+                            dateTamppung,
+                            getCurrentDateTime()
                         )
                     )
                     finish()
@@ -171,8 +179,8 @@ class EditNoteActivity : AppCompatActivity() {
                 geNote()
             }
         }
-        val date = getCurrentDateTime()
-        val dateInString = date.toString("dd/MM/yyyy HH:mm")
+        val date = getDateKosongan()
+        val dateInString = date.toString(Constants.sdf)
         editNoteBinding.tTanggal.text = dateInString
     }
 
@@ -183,8 +191,8 @@ class EditNoteActivity : AppCompatActivity() {
             editNoteBinding.eJudul.setText(selectedNote.judul)
             editNoteBinding.eIsi.setText(selectedNote.isi)
             editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
-            editNoteBinding.tTanggal.setText(selectedNote.tanggal)
-
+            editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
+            dateTamppung = selectedNote.tanggal
 //            notegambar = selectedNote.gambar
             imagepathtemp = selectedNote.gambar
             Log.d("EditNoteActivity","Gambar = "+imagepathtemp)
@@ -237,49 +245,31 @@ class EditNoteActivity : AppCompatActivity() {
 
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val inflater = menuInflater
-//        inflater.inflate(R.menu.menu_add,menu)
-//        return true
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId){
-//            R.id.action_save -> {
-//                updateNote()
-//                return true
-//            }
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//    }
-
-//    private fun updateNote() {
-//        if(editNoteBinding.eJudul.text.toString().equals(note.judul)
-//            || editNoteBinding.eIsi.text.toString().equals(note.isi)
-//            || editNoteBinding.eUrlLink.text.toString().equals(note.urlLink)
-//            || editNoteBinding.eGambar.text.toString().equals(note.gambar)){
-//            Toast.makeText(this, "Record not changed", Toast.LENGTH_SHORT).show()
-//            return
-//        }
-//        val date = getCurrentDateTime()
-//        val dateInString = date.toString("dd/MM/yyyy HH:mm")
-//        val note = Notes(id = note.id,judul = editNoteBinding.eJudul.text.toString(),isi = editNoteBinding.eIsi.text.toString(),urlLink = editNoteBinding.eUrlLink.text.toString(),gambar = editNoteBinding.eGambar.text.toString(),tanggal = dateInString)
-//        val status = sqLiteHelper.updateNote(note)
-//        if(status>-1){
-//            Toast.makeText(this, "Update Berhasil", Toast.LENGTH_SHORT).show()
-//            finish()
-//        }
-//        else{
-//            Toast.makeText(this, "Update Gagal", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
     fun Date.toString(format : String, locale: Locale = Locale.getDefault()): String{
-        val formatter = SimpleDateFormat(format,locale)
+        val formatter = SimpleDateFormat(format)
         return formatter.format(this)
     }
 
     fun getCurrentDateTime(): Date {
         return Calendar.getInstance().time
+    }
+
+    fun getDateKosongan():Date{
+        val formater = SimpleDateFormat(Constants.sdf)
+        if(!dateAwal.isEmpty()){
+            val daw = formater.parse(dateAwal)
+            val dak = formater.parse(dateAkhir)
+            val dnow = Calendar.getInstance().time
+            if(dnow.after(daw) && dnow.before(dak)){
+                return dnow
+            }
+            else{
+                return getCurrentDateTime()
+            }
+
+        }
+        else{
+            return getCurrentDateTime()
+        }
     }
 }

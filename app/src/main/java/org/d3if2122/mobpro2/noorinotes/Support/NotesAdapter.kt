@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.notes_item_list.view.*
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import org.d3if2122.mobpro2.noorinotes.R
+import java.text.SimpleDateFormat
 
 class NotesAdapter(private val notes:ArrayList<Notes>, private val listener:OnAdapterListener) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
@@ -20,8 +21,9 @@ class NotesAdapter(private val notes:ArrayList<Notes>, private val listener:OnAd
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val note = notes[position]
+        val formatter = SimpleDateFormat("HH:mm")
         holder.view.judulNotes.text = note.judul
-        holder.view.tanggalNotes.text = note.tanggal
+        holder.view.tanggalNotes.text = formatter.format(note.tanggal)
         holder.view.tempatClick.setOnClickListener{
             listener.onRead(note)
         }

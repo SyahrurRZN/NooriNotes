@@ -1,5 +1,6 @@
 package org.d3if2122.mobpro2.noorinotes
 
+import android.app.ActionBar
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +16,16 @@ import org.d3if2122.mobpro2.noorinotes.Support.Constants
 import org.d3if2122.mobpro2.noorinotes.Support.NotesAdapter
 import org.d3if2122.mobpro2.noorinotes.Support.NotesDB
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityDayListNotesBinding
+import java.text.SimpleDateFormat
 
 class DayListNotesActivity : AppCompatActivity() {
     private lateinit var activityDayListNotesBinding: ActivityDayListNotesBinding
 
     val db by lazy { NotesDB(this) }
     lateinit var notesAdapter: NotesAdapter
+    private var dateAwal = ""
+    private var dateAkhir = ""
+    private var dateKosongan = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +33,8 @@ class DayListNotesActivity : AppCompatActivity() {
         val rootView = activityDayListNotesBinding.root
         setContentView(rootView)
 
-        Log.d("DayListnote","Masuk baru")
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         setupListener()
         setupRecyclerView()
     }
@@ -82,6 +88,8 @@ class DayListNotesActivity : AppCompatActivity() {
             Intent(applicationContext,EditNoteActivity::class.java)
                 .putExtra("note_id",noteId)
                 .putExtra("intent_type",intentType)
+                .putExtra("awal",dateAwal)
+                .putExtra("akhir",dateAkhir)
         )
     }
 
@@ -91,8 +99,15 @@ class DayListNotesActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
+        dateAwal = intent.getStringExtra("awal").toString()
+        dateAkhir = intent.getStringExtra("akhir").toString()
+        dateKosongan = intent.getStringExtra("kosongan").toString()
+        supportActionBar!!.title = dateKosongan
+        val formatter = SimpleDateFormat(Constants.sdf)
+        val awalBanget = formatter.parse(dateAwal)
+        val akhirBanget = formatter.parse(dateAkhir)
         CoroutineScope(Dispatchers.IO).launch {
-            val allnotes = db.notesDao().getAllNotes()
+            val allnotes = db.notesDao().getAllNotesbyDay(awalBanget,akhirBanget)
             withContext(Dispatchers.Main){
                 notesAdapter.setData(allnotes)
             }

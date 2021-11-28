@@ -1,8 +1,8 @@
 package org.d3if2122.mobpro2.noorinotes.Model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity
 class Notes(
@@ -12,7 +12,8 @@ class Notes(
     val isi: String,
     val urlLink: String,
     val gambar: String,
-    val tanggal: String,
+    val tanggal: Date?,
+    val tanggalUpdate: Date
 //    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
 //    val imageString : ByteArray
 )

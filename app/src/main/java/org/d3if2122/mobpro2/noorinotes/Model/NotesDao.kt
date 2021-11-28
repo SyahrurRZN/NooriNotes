@@ -1,6 +1,7 @@
 package org.d3if2122.mobpro2.noorinotes.Model
 
 import androidx.room.*
+import java.util.*
 
 @Dao
 interface NotesDao {
@@ -18,4 +19,7 @@ interface NotesDao {
 
     @Query("SELECT * FROM notes WHERE id=:note_id")
     fun getNote(note_id:Int):List<Notes>
+
+    @Query("SELECT * FROM notes WHERE tanggal BETWEEN :from AND :to")
+    fun getAllNotesbyDay(from: Date, to: Date):List<Notes>
 }
