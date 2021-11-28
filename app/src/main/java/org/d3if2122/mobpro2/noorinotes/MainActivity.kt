@@ -7,6 +7,7 @@ import android.util.Log
 import org.d3if2122.mobpro2.noorinotes.Support.Constants
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -43,14 +44,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDataCalendarView(year: Int, month: Int, dayOfMonth: Int) {
-        val dateSebelum = "$dayOfMonth/${month}/$year 00:00:00"
-        val dateSesudah = "$dayOfMonth/${month}/$year 23:59:59"
+        var dateSebelum = "$dayOfMonth/${month}/$year 00:00:00"
+        var dateSesudah = "$dayOfMonth/${month}/$year 23:59:59"
         val dataKosongan = "$dayOfMonth/${month}/$year"
-
-//        val dsb = formatter.parse(dateSebelum)
-//        val dss = formatter.parse(dateSesudah)
-//        Log.d("menuAwal","sebelum $dsb")
-//        Log.d("menuAwal","sesudah $dss")
 
         startActivity(Intent(
             applicationContext,DayListNotesActivity::class.java)

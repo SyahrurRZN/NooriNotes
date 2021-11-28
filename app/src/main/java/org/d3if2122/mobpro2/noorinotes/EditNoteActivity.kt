@@ -195,13 +195,11 @@ class EditNoteActivity : AppCompatActivity() {
             dateTamppung = selectedNote.tanggal
 //            notegambar = selectedNote.gambar
             imagepathtemp = selectedNote.gambar
-            Log.d("EditNoteActivity","Gambar = "+imagepathtemp)
             loadGambar(selectedNote.gambar)
         }
     }
 
     private fun loadGambar(gambar: String) {
-        Log.d("EditActivity","gambar : ${gambar}")
         runOnUiThread{
             Picasso.get()
                 .load(Uri.parse(gambar))
@@ -257,7 +255,14 @@ class EditNoteActivity : AppCompatActivity() {
     fun getDateKosongan():Date{
         val formater = SimpleDateFormat(Constants.sdf)
         if(!dateAwal.isEmpty()){
-            return formater.parse(dateAwal)
+            val daw = formater.parse(dateAwal)
+            val dak = formater.parse(dateAkhir)
+            if(getCurrentDateTime().after(daw) && getCurrentDateTime().before(dak)){
+                return getCurrentDateTime()
+            }
+            else{
+                return daw
+            }
         }
         else{
             return getCurrentDateTime()
