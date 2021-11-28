@@ -6,36 +6,35 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import org.d3if2122.mobpro2.noorinotes.Support.Constants
 import org.d3if2122.mobpro2.noorinotes.Support.NotesAdapter
 import org.d3if2122.mobpro2.noorinotes.Support.NotesDB
-import org.d3if2122.mobpro2.noorinotes.databinding.ActivityMainBinding
+import org.d3if2122.mobpro2.noorinotes.databinding.ActivityDayListNotesBinding
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var activityMainBinding: ActivityMainBinding
+class DayListNotesActivity : AppCompatActivity() {
+    private lateinit var activityDayListNotesBinding: ActivityDayListNotesBinding
 
     val db by lazy { NotesDB(this) }
     lateinit var notesAdapter: NotesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        val rootView = activityMainBinding.root
+        activityDayListNotesBinding = ActivityDayListNotesBinding.inflate(layoutInflater)
+        val rootView = activityDayListNotesBinding.root
         setContentView(rootView)
 
+        Log.d("DayListnote","Masuk baru")
         setupListener()
         setupRecyclerView()
     }
 
-    override fun onStart() {
-        super.onStart()
-        loadData()
-    }
-
     private fun setupRecyclerView() {
-        notesAdapter = NotesAdapter(arrayListOf(),object :NotesAdapter.OnAdapterListener{
+        notesAdapter = NotesAdapter(arrayListOf(),object : NotesAdapter.OnAdapterListener{
             override fun onRead(note: Notes) {
                 intentCustom(note.id,Constants.TYPE_READ)
             }
@@ -49,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        activityMainBinding.recycleview.apply {
+        activityDayListNotesBinding.recycleview.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = notesAdapter
         }
@@ -72,19 +71,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun loadData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val allnotes = db.notesDao().getAllNotes()
-            Log.d("MainActivity","dbREsponse : $allnotes")
-            withContext(Dispatchers.Main){
-                notesAdapter.setData(allnotes)
-            }
-        }
-    }
-
     private fun setupListener() {
-        activityMainBinding.fab.setOnClickListener{
-            startActivity(Intent(applicationContext,DayListNotesActivity::class.java))
+        activityDayListNotesBinding.fab.setOnClickListener{
+            intentCustom(0,Constants.TYPE_CREATE)
         }
     }
 
@@ -94,5 +83,19 @@ class MainActivity : AppCompatActivity() {
                 .putExtra("note_id",noteId)
                 .putExtra("intent_type",intentType)
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loadData()
+    }
+
+    private fun loadData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val allnotes = db.notesDao().getAllNotes()
+            withContext(Dispatchers.Main){
+                notesAdapter.setData(allnotes)
+            }
+        }
     }
 }

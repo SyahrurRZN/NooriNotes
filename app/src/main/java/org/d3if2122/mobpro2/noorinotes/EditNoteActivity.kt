@@ -1,14 +1,20 @@
 package org.d3if2122.mobpro2.noorinotes
 
+import android.Manifest
+import android.app.AlertDialog
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.squareup.picasso.Picasso
+import com.swein.easypermissionmanager.EasyPermissionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +22,7 @@ import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import org.d3if2122.mobpro2.noorinotes.Support.Constants
 import org.d3if2122.mobpro2.noorinotes.Support.NotesDB
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityEditNoteBinding
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,6 +31,12 @@ class EditNoteActivity : AppCompatActivity() {
     private val db by lazy { NotesDB(this) }
     private var noteId =0
     private var notegambar=""
+    private var pilihUri: Uri? =null
+    private var tempUri: Uri? =null
+    private var imagepathtemp = ""
+    private var readNote = false
+
+    private val easyPermissionManager = EasyPermissionManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +63,7 @@ class EditNoteActivity : AppCompatActivity() {
                             editNoteBinding.eJudul.text.toString(),
                             editNoteBinding.eIsi.text.toString(),
                             editNoteBinding.eUrlLink.text.toString(),
-                            "rr",//TODO:belum
+                            imagepathtemp,
                             editNoteBinding.tTanggal.text.toString()
                         )
                     )
@@ -72,7 +85,7 @@ class EditNoteActivity : AppCompatActivity() {
                             editNoteBinding.eJudul.text.toString(),
                             editNoteBinding.eIsi.text.toString(),
                             editNoteBinding.eUrlLink.text.toString(),
-                            "rr",//TODO:belum
+                            imagepathtemp,//TODO:belum
                             editNoteBinding.tTanggal.text.toString()
                         )
                     )
@@ -80,6 +93,58 @@ class EditNoteActivity : AppCompatActivity() {
                 }
             }
         }
+        editNoteBinding.iGambar.setOnClickListener{
+            if(readNote == false){
+                imagePickDialog()
+            }
+        }
+    }
+
+    private fun imagePickDialog() {
+        val options = arrayOf("Camera","Gallery")
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Pick Image From")
+        builder.setItems(options){dialog,which ->
+            if (which==0){
+
+                easyPermissionManager.requestPermission(
+                    "permission",
+                    "permission are necessary,",
+                    "setting",
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                ){
+                    tempUri = FileProvider.getUriForFile(this,"org.d3if2122.mobpro2.noorinotes.provider", createImageFile().also{
+                        imagepathtemp = it.absolutePath
+                    })
+                    cameraLauncher.launch(tempUri)
+                }
+            }
+            else if (which==1){
+                easyPermissionManager.requestPermission(
+                    "permission",
+                    "permission are necessary,",
+                    "setting",
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                ){
+                    selectPictureLauncher.launch("image/*")
+                }
+
+            }
+        }
+        builder.create().show()
+    }
+
+    private fun createImageFile(): File {
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(System.currentTimeMillis().toString(),".jpg",storageDir)
     }
 
     private fun setView() {
@@ -89,17 +154,20 @@ class EditNoteActivity : AppCompatActivity() {
                 supportActionBar!!.title = "BUAT NOTE BARU"
                 editNoteBinding.buttonTambah.visibility = View.VISIBLE
                 editNoteBinding.buttonUpdate.visibility = View.GONE
+                readNote = false
             }
             Constants.TYPE_READ ->{
                 supportActionBar!!.title = "LIHAT NOTE"
                 editNoteBinding.buttonTambah.visibility = View.GONE
                 editNoteBinding.buttonUpdate.visibility = View.GONE
+                readNote = true
                 geNote()
             }
             Constants.TYPE_UPDATE ->{
                 supportActionBar!!.title = "EDIT NOTE"
                 editNoteBinding.buttonTambah.visibility = View.GONE
                 editNoteBinding.buttonUpdate.visibility = View.VISIBLE
+                readNote = false
                 geNote()
             }
         }
@@ -116,7 +184,10 @@ class EditNoteActivity : AppCompatActivity() {
             editNoteBinding.eIsi.setText(selectedNote.isi)
             editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
             editNoteBinding.tTanggal.setText(selectedNote.tanggal)
-            notegambar = selectedNote.gambar
+
+//            notegambar = selectedNote.gambar
+            imagepathtemp = selectedNote.gambar
+            Log.d("EditNoteActivity","Gambar = "+imagepathtemp)
             loadGambar(selectedNote.gambar)
         }
     }
@@ -139,6 +210,31 @@ class EditNoteActivity : AppCompatActivity() {
 
     private fun intentType(): Int {
         return intent.getIntExtra("intent_type",0)
+    }
+
+    private val selectPictureLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
+        if(it != null){
+            pilihUri = it
+            imagepathtemp = it.path.toString()
+            loadGambarURI(it)
+        }
+    }
+
+    private fun loadGambarURI(it: Uri?) {
+        runOnUiThread{
+            Picasso.get()
+                .load(it)
+                .placeholder(R.drawable.ic_baseline_image_24)
+                .error(R.drawable.ic_baseline_broken_image_24)
+                .into(editNoteBinding.iGambar)
+        }
+    }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()){ success ->
+        if(success){
+            loadGambarURI(tempUri)
+        }
+
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
