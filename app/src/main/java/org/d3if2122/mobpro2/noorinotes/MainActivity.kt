@@ -23,11 +23,11 @@ class MainActivity : AppCompatActivity() {
 //        setupListener()
     }
 
-    private fun setupListener() {
-        activityMainBinding.fab.setOnClickListener{
-            intentCustom(0,Constants.TYPE_CREATE)
-        }
-    }
+//    private fun setupListener() {
+//        activityMainBinding.fab.setOnClickListener{
+//            intentCustom(0,Constants.TYPE_CREATE)
+//        }
+//    }
 
     private fun intentCustom(noteId: Int, intentType: Int) {
         startActivity(

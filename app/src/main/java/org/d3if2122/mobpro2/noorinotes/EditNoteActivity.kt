@@ -2,15 +2,18 @@ package org.d3if2122.mobpro2.noorinotes
 
 import android.Manifest
 import android.app.AlertDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.squareup.picasso.Picasso
 import com.swein.easypermissionmanager.EasyPermissionManager
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +23,7 @@ import org.d3if2122.mobpro2.noorinotes.Model.Notes
 import org.d3if2122.mobpro2.noorinotes.Support.Constants
 import org.d3if2122.mobpro2.noorinotes.Support.NotesDB
 import org.d3if2122.mobpro2.noorinotes.databinding.ActivityEditNoteBinding
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,9 +32,9 @@ class EditNoteActivity : AppCompatActivity() {
     private lateinit var editNoteBinding: ActivityEditNoteBinding
     private val db by lazy { NotesDB(this) }
     private var noteId =0
-    private var pilihUri: Uri? =null
+//    private var pilihUri: Uri? =null
     private var tempUri: Uri? =null
-    private var imagepathtemp = ""
+//    private var imagepathtemp = ""
     private var readNote = false
     private var dateAwal =""
     private var dateAkhir =""
@@ -56,26 +60,46 @@ class EditNoteActivity : AppCompatActivity() {
 
     private fun setListener() {
         editNoteBinding.buttonTambah.setOnClickListener{
-            if(editNoteBinding.eJudul.text.toString().trim().isEmpty()
-                || editNoteBinding.eIsi.text.toString().trim().isEmpty()
-                || editNoteBinding.eUrlLink.text.toString().trim().isEmpty()){
+            if(editNoteBinding.eJudul.text.toString().trim().isEmpty()){
                 Toast.makeText(this, "Data harus diisi!", Toast.LENGTH_SHORT).show()
             }
+            else if(tempUri==null){
+                Toast.makeText(this, "Gambar tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+            }
             else{
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.notesDao().tambahNote(
-                        Notes(
-                            0,
-                            editNoteBinding.eJudul.text.toString(),
-                            editNoteBinding.eIsi.text.toString(),
-                            editNoteBinding.eUrlLink.text.toString(),
-                            imagepathtemp,
-                            getDateKosongan(),
-                            getCurrentDateTime()
+                if(tempUri!=null){
+                    CoroutineScope(Dispatchers.IO).launch {
+                        db.notesDao().tambahNote(
+                            Notes(
+                                0,
+                                editNoteBinding.eJudul.text.toString(),
+                                editNoteBinding.eIsi.text.toString(),
+                                editNoteBinding.eUrlLink.text.toString(),
+                                getBitmap(tempUri),
+                                getDateKosongan(),
+                                getCurrentDateTime()
+                            )
                         )
-                    )
-                    finish()
+                        finish()
+                    }
                 }
+                else{
+                    CoroutineScope(Dispatchers.IO).launch {
+                        db.notesDao().tambahNote(
+                            Notes(
+                                0,
+                                editNoteBinding.eJudul.text.toString(),
+                                editNoteBinding.eIsi.text.toString(),
+                                editNoteBinding.eUrlLink.text.toString(),
+                                getBitmapDefault(),
+                                getDateKosongan(),
+                                getCurrentDateTime()
+                            )
+                        )
+                        finish()
+                    }
+                }
+
             }
         }
         editNoteBinding.buttonUpdate.setOnClickListener{
@@ -85,19 +109,37 @@ class EditNoteActivity : AppCompatActivity() {
                 Toast.makeText(this, "Data tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
             else{
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.notesDao().ubahNote(
-                        Notes(
-                            noteId,
-                            editNoteBinding.eJudul.text.toString(),
-                            editNoteBinding.eIsi.text.toString(),
-                            editNoteBinding.eUrlLink.text.toString(),
-                            imagepathtemp,
-                            dateTamppung,
-                            getCurrentDateTime()
+                if(tempUri!=null){
+                    CoroutineScope(Dispatchers.IO).launch {
+                        db.notesDao().ubahNote(
+                            Notes(
+                                noteId,
+                                editNoteBinding.eJudul.text.toString(),
+                                editNoteBinding.eIsi.text.toString(),
+                                editNoteBinding.eUrlLink.text.toString(),
+                                getBitmap(tempUri),
+                                dateTamppung,
+                                getCurrentDateTime()
+                            )
                         )
-                    )
-                    finish()
+                        finish()
+                    }
+                }
+                else{
+                    CoroutineScope(Dispatchers.IO).launch {
+                        db.notesDao().ubahNote(
+                            Notes(
+                                noteId,
+                                editNoteBinding.eJudul.text.toString(),
+                                editNoteBinding.eIsi.text.toString(),
+                                editNoteBinding.eUrlLink.text.toString(),
+                                getBitmapDefault(),
+                                dateTamppung,
+                                getCurrentDateTime()
+                            )
+                        )
+                        finish()
+                    }
                 }
             }
         }
@@ -126,7 +168,7 @@ class EditNoteActivity : AppCompatActivity() {
                     )
                 ){
                     tempUri = FileProvider.getUriForFile(this,"org.d3if2122.mobpro2.noorinotes.provider", createImageFile().also{
-                        imagepathtemp = it.absolutePath
+//                        imagepathtemp = it.absolutePath
                     })
                     cameraLauncher.launch(tempUri)
                 }
@@ -194,20 +236,38 @@ class EditNoteActivity : AppCompatActivity() {
             editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
             dateTamppung = selectedNote.tanggal
 //            notegambar = selectedNote.gambar
-            imagepathtemp = selectedNote.gambar
-            loadGambar(selectedNote.gambar)
+//            imagepathtemp = selectedNote.gambar
+//            loadGambar(selectedNote.gambar)
+            if(selectedNote!=null){
+                editNoteBinding.iGambar.setImageBitmap(selectedNote.gambar)
+                val photo = selectedNote.gambar
+
+                val file = File(applicationContext.cacheDir,"CUSTOM NAME") //Get Access to a local file.
+                file.delete() // Delete the File, just in Case, that there was still another File
+                file.createNewFile()
+                val fileOutputStream = file.outputStream()
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                photo!!.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
+                val bytearray = byteArrayOutputStream.toByteArray()
+                fileOutputStream.write(bytearray)
+                fileOutputStream.flush()
+                fileOutputStream.close()
+                byteArrayOutputStream.close()
+
+                tempUri = file.toUri()
+            }
         }
     }
 
-    private fun loadGambar(gambar: String) {
-        runOnUiThread{
-            Picasso.get()
-                .load(Uri.parse(gambar))
-                .placeholder(R.drawable.ic_baseline_image_24)
-                .error(R.drawable.ic_baseline_broken_image_24)
-                .into(editNoteBinding.iGambar)
-        }
-    }
+//    private fun loadGambar(gambar: Bitmap) {
+//        runOnUiThread{
+//            Picasso.get()
+//                .load(gambar)
+//                .placeholder(R.drawable.ic_baseline_image_24)
+//                .error(R.drawable.ic_baseline_broken_image_24)
+//                .into(editNoteBinding.iGambar)
+//        }
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         finish()
@@ -220,8 +280,8 @@ class EditNoteActivity : AppCompatActivity() {
 
     private val selectPictureLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if(it != null){
-            pilihUri = it
-            imagepathtemp = it.path.toString()
+            tempUri = it
+//            imagepathtemp = it.path.toString()
             loadGambarURI(it)
         }
     }
@@ -267,5 +327,12 @@ class EditNoteActivity : AppCompatActivity() {
         else{
             return getCurrentDateTime()
         }
+    }
+    private fun getBitmap(tempUri: Uri?): Bitmap? {
+        return MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(tempUri.toString()))
+    }
+
+    private fun getBitmapDefault():Bitmap?{
+        return BitmapFactory.decodeResource(resources,R.drawable.ic_baseline_image_24)
     }
 }
