@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Mobpro/43-mobpro-izm-43gab3-noori/app/src/main/res/layout/activity_day_list_notes.xml" value="0.264" />
+        <entry key="..\:/Mobpro/43-mobpro-izm-43gab3-noori/app/src/main/res/layout/activity_edit_note.xml" value="0.264" />
+        <entry key="..\:/Mobpro/43-mobpro-izm-43gab3-noori/app/src/main/res/layout/notes_item_list.xml" value="0.264" />
         <entry key="..\:/NooriNotes/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.17407407407407408" />
         <entry key="..\:/NooriNotes/app/src/main/res/drawable/rectangle_blue.xml" value="0.26614583333333336" />
         <entry key="..\:/NooriNotes/app/src/main/res/layout/activity_add_notes.xml" value="0.1" />
@@ -18,7 +21,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

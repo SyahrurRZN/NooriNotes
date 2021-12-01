@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,62 +22,73 @@
         android:id="@+id/eJudul"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Judul"
+        android:hint="@string/judul"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iGambar" />
 
     <EditText
-        android:layout_marginTop="16dp"
         android:id="@+id/eIsi"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:gravity="top"
-        android:hint="Tulis Catatan"
+        android:hint="@string/catatan"
         android:minLines="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eJudul" />
 
     <EditText
-        android:layout_marginTop="16dp"
         android:id="@+id/eUrlLink"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Link"
+        android:layout_marginTop="16dp"
+        android:hint="@string/link"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eIsi" />
 
     <TextView
-        android:layout_marginTop="16dp"
         android:id="@+id/tTanggal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tanggal"
+        android:layout_width="235dp"
+        android:layout_height="27dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/waktu"
         android:textAlignment="textEnd"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonStwaktu"
+        app:layout_constraintEnd_toStartOf="@+id/buttonStwaktu"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eUrlLink" />
+        app:layout_constraintTop_toTopOf="@+id/buttonStwaktu" />
 
     <Button
         android:id="@+id/buttonTambah"
-        android:text="Tambah"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tTanggal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="32dp"
+        android:text="@string/tambah"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tTanggal" />
+
     <Button
         android:id="@+id/buttonUpdate"
-        android:text="Edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonTambah"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:text="@string/edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonTambah" />
+
+    <Button
+        android:id="@+id/buttonStwaktu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/stwaktu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eUrlLink" />
 </androidx.constraintlayout.widget.ConstraintLayout>

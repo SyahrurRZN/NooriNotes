@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Noori Notes</string>
     <string name="plus">Plus</string>
+    <string name="waktu">Waktu</string>
+    <string name="judul">Judul</string>
+    <string name="catatan">Catatan</string>
+    <string name="stwaktu">Set Waktu</string>
+    <string name="tambah">Tambah</string>
+    <string name="edit">Edit</string>
+    <string name="link">Link</string>
 </resources>
