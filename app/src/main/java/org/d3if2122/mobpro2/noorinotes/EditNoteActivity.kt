@@ -149,21 +149,6 @@ class  EditNoteActivity : AppCompatActivity() {
                 imagePickDialog()
             }
         }
-        editNoteBinding.buttonStwaktu.setOnClickListener{
-            timePickerDialog()
-        }
-    }
-
-    private fun timePickerDialog() {
-        val cal = Calendar.getInstance()
-        val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-            cal.set(Calendar.HOUR_OF_DAY, hour)
-            cal.set(Calendar.MINUTE, minute)
-
-            editNoteBinding.tTanggal.text = SimpleDateFormat("HH:mm").format(cal.time)
-        }
-        TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY),
-            cal.get(Calendar.MINUTE), true).show()
     }
 
     private fun imagePickDialog() {
@@ -251,7 +236,7 @@ class  EditNoteActivity : AppCompatActivity() {
             editNoteBinding.eIsi.setText(selectedNote.isi)
             editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
             editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
-            //dateTamppung = selectedNote.tanggal
+            dateTamppung = selectedNote.tanggal
 //            notegambar = selectedNote.gambar
 //            imagepathtemp = selectedNote.gambar
 //            loadGambar(selectedNote.gambar)
@@ -321,7 +306,7 @@ class  EditNoteActivity : AppCompatActivity() {
     }
 
     fun Date.toString(format : String, locale: Locale = Locale.getDefault()): String{
-        val formatter = SimpleDateFormat("HH:mm").format(time)
+        val formatter = SimpleDateFormat(format)
         return formatter.format(this)
     }
 

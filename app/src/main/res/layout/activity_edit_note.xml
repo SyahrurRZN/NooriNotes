@@ -53,15 +53,14 @@
 
     <TextView
         android:id="@+id/tTanggal"
-        android:layout_width="235dp"
-        android:layout_height="27dp"
-        android:layout_marginEnd="24dp"
+        android:layout_width="361dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/waktu"
         android:textAlignment="textEnd"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonStwaktu"
-        app:layout_constraintEnd_toStartOf="@+id/buttonStwaktu"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonStwaktu" />
+        app:layout_constraintTop_toBottomOf="@+id/eUrlLink" />
 
     <Button
         android:id="@+id/buttonTambah"
@@ -83,12 +82,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonTambah" />
 
-    <Button
-        android:id="@+id/buttonStwaktu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/stwaktu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eUrlLink" />
 </androidx.constraintlayout.widget.ConstraintLayout>
