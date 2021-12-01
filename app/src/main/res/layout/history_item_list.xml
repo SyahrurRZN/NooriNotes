@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:orientation="vertical"
+    android:id="@+id/tempatHistoryClick">
+    <TextView
+        android:id="@+id/judulNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Judul"
+        android:textAppearance="@android:style/TextAppearance.Large"/>
+    <TextView
+        android:layout_marginTop="4dp"
+        android:id="@+id/tanggalNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tanggal"
+        android:textAppearance="@android:style/TextAppearance.Small"/>
+
+</LinearLayout>

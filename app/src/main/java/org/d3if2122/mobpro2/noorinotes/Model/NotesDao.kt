@@ -22,4 +22,7 @@ interface NotesDao {
 
     @Query("SELECT * FROM notes WHERE tanggal BETWEEN :from AND :to")
     fun getAllNotesbyDay(from: Date, to: Date):List<Notes>
+
+    @Query("DELETE FROM notes WHERE id=:note_id")
+    fun deleteote(note_id:Int)
 }
