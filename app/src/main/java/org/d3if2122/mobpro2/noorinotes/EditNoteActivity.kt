@@ -2,6 +2,7 @@ package org.d3if2122.mobpro2.noorinotes
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.TimePickerDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -28,16 +29,16 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditNoteActivity : AppCompatActivity() {
+class  EditNoteActivity : AppCompatActivity() {
     private lateinit var editNoteBinding: ActivityEditNoteBinding
     private val db by lazy { NotesDB(this) }
     private var noteId =0
-//    private var pilihUri: Uri? =null
+    //    private var pilihUri: Uri? =null
     private var tempUri: Uri? =null
-//    private var imagepathtemp = ""
+    //    private var imagepathtemp = ""
     private var readNote = false
-    private var dateAwal =""
-    private var dateAkhir =""
+    private var timeAwal =""
+    private var timeAkhir =""
     private var dateTamppung:Date? = null
 
     private val easyPermissionManager = EasyPermissionManager(this)
@@ -54,8 +55,8 @@ class EditNoteActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        dateAwal= intent.getStringExtra("awal").toString()
-        dateAkhir= intent.getStringExtra("akhir").toString()
+        timeAwal= intent.getStringExtra("awal").toString()
+        timeAkhir= intent.getStringExtra("akhir").toString()
     }
 
     private fun setListener() {
@@ -148,6 +149,21 @@ class EditNoteActivity : AppCompatActivity() {
                 imagePickDialog()
             }
         }
+        editNoteBinding.buttonStwaktu.setOnClickListener{
+            timePickerDialog()
+        }
+    }
+
+    private fun timePickerDialog() {
+        val cal = Calendar.getInstance()
+        val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+            cal.set(Calendar.HOUR_OF_DAY, hour)
+            cal.set(Calendar.MINUTE, minute)
+
+            editNoteBinding.tTanggal.text = SimpleDateFormat("HH:mm").format(cal.time)
+        }
+        TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY),
+            cal.get(Calendar.MINUTE), true).show()
     }
 
     private fun imagePickDialog() {
@@ -224,6 +240,7 @@ class EditNoteActivity : AppCompatActivity() {
         val date = getDateKosongan()
         val dateInString = date.toString(Constants.sdf)
         editNoteBinding.tTanggal.text = dateInString
+
     }
 
     private fun geNote() {
@@ -234,7 +251,7 @@ class EditNoteActivity : AppCompatActivity() {
             editNoteBinding.eIsi.setText(selectedNote.isi)
             editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
             editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
-            dateTamppung = selectedNote.tanggal
+            //dateTamppung = selectedNote.tanggal
 //            notegambar = selectedNote.gambar
 //            imagepathtemp = selectedNote.gambar
 //            loadGambar(selectedNote.gambar)
@@ -304,7 +321,7 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
     fun Date.toString(format : String, locale: Locale = Locale.getDefault()): String{
-        val formatter = SimpleDateFormat(format)
+        val formatter = SimpleDateFormat("HH:mm").format(time)
         return formatter.format(this)
     }
 
@@ -314,9 +331,9 @@ class EditNoteActivity : AppCompatActivity() {
 
     fun getDateKosongan():Date{
         val formater = SimpleDateFormat(Constants.sdf)
-        if(!dateAwal.isEmpty()){
-            val daw = formater.parse(dateAwal)
-            val dak = formater.parse(dateAkhir)
+        if(!timeAwal.isEmpty()){
+            val daw = formater.parse(timeAwal)
+            val dak = formater.parse(timeAkhir)
             if(getCurrentDateTime().after(daw) && getCurrentDateTime().before(dak)){
                 return getCurrentDateTime()
             }
