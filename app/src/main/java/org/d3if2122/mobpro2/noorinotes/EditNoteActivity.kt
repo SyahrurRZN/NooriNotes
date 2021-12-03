@@ -35,6 +35,8 @@ class  EditNoteActivity : AppCompatActivity() {
     private var noteId =0
     //    private var pilihUri: Uri? =null
     private var tempUri: Uri? =null
+
+    private var uriBaru: Uri?=null
     //    private var imagepathtemp = ""
     private var readNote = false
     private var timeAwal =""
@@ -180,10 +182,10 @@ class  EditNoteActivity : AppCompatActivity() {
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     )
                 ){
-                    tempUri = FileProvider.getUriForFile(this,"org.d3if2122.mobpro2.noorinotes.provider", createImageFile().also{
+                    uriBaru = FileProvider.getUriForFile(this,"org.d3if2122.mobpro2.noorinotes.provider", createImageFile().also{
 //                        imagepathtemp = it.absolutePath
                     })
-                    cameraLauncher.launch(tempUri)
+                    cameraLauncher.launch(uriBaru)
                 }
             }
             else if (which==1){
@@ -248,27 +250,12 @@ class  EditNoteActivity : AppCompatActivity() {
             editNoteBinding.eIsi.setText(selectedNote.isi)
             editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
             editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
-            //dateTamppung = selectedNote.tanggal
+            dateTamppung = selectedNote.tanggal
 //            notegambar = selectedNote.gambar
 //            imagepathtemp = selectedNote.gambar
 //            loadGambar(selectedNote.gambar)
             if(selectedNote!=null){
-                editNoteBinding.iGambar.setImageBitmap(selectedNote.gambar)
-                val photo = selectedNote.gambar
-
-                val file = File(applicationContext.cacheDir,"CUSTOM NAME") //Get Access to a local file.
-                file.delete() // Delete the File, just in Case, that there was still another File
-                file.createNewFile()
-                val fileOutputStream = file.outputStream()
-                val byteArrayOutputStream = ByteArrayOutputStream()
-                photo!!.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
-                val bytearray = byteArrayOutputStream.toByteArray()
-                fileOutputStream.write(bytearray)
-                fileOutputStream.flush()
-                fileOutputStream.close()
-                byteArrayOutputStream.close()
-
-                tempUri = file.toUri()
+                runGetUriFavorite(selectedNote)
             }
         }
     }
@@ -310,8 +297,9 @@ class  EditNoteActivity : AppCompatActivity() {
         }
     }
 
-    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()){ success ->
-        if(success){
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()){
+        if(it){
+            tempUri = uriBaru
             loadGambarURI(tempUri)
         }
 
@@ -348,5 +336,26 @@ class  EditNoteActivity : AppCompatActivity() {
 
     private fun getBitmapDefault():Bitmap?{
         return BitmapFactory.decodeResource(resources,R.drawable.ic_baseline_image_24)
+    }
+
+    private fun runGetUriFavorite(selectedNote: Notes) {
+        editNoteBinding.iGambar.setImageBitmap(selectedNote.gambar)
+        runOnUiThread(Runnable {
+            val photo = selectedNote.gambar
+
+            val file = File(applicationContext.cacheDir,"CUSTOM NAME") //Get Access to a local file.
+            file.delete() // Delete the File, just in Case, that there was still another File
+            file.createNewFile()
+            val fileOutputStream = file.outputStream()
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            photo!!.compress(Bitmap.CompressFormat.JPEG,10,byteArrayOutputStream)
+            val bytearray = byteArrayOutputStream.toByteArray()
+            fileOutputStream.write(bytearray)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            byteArrayOutputStream.close()
+
+            tempUri = file.toUri()
+        })
     }
 }

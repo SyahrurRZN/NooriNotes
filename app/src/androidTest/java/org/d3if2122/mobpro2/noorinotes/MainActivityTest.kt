@@ -24,11 +24,10 @@ class MainActivityTest {
 
         Espresso.onView((withId(R.id.historyrecycle))).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
-                2,
+                1,
                 click()
             )
         )
-
 
 // Tes selesai, tutup activity nya
     activityScenario.close()

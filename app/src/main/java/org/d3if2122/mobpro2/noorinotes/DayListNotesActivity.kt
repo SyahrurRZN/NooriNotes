@@ -84,13 +84,16 @@ class DayListNotesActivity : AppCompatActivity() {
     }
 
     private fun intentCustom(noteId: Int, intentType: Int) {
-        startActivity(
-            Intent(applicationContext,EditNoteActivity::class.java)
-                .putExtra("note_id",noteId)
-                .putExtra("intent_type",intentType)
-                .putExtra("awal",dateAwal)
-                .putExtra("akhir",dateAkhir)
-        )
+        runOnUiThread(Runnable {
+            startActivity(
+                Intent(applicationContext,EditNoteActivity::class.java)
+                    .putExtra("note_id",noteId)
+                    .putExtra("intent_type",intentType)
+                    .putExtra("awal",dateAwal)
+                    .putExtra("akhir",dateAkhir)
+            )
+        })
+
     }
 
     override fun onStart() {

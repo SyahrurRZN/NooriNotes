@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/iGambar"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_add_a_photo_24"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,6 +21,7 @@
     <EditText
         android:id="@+id/eJudul"
         android:layout_width="0dp"
+        android:layout_marginTop="16dp"
         android:layout_height="wrap_content"
         android:hint="@string/judul"
         android:inputType="text"

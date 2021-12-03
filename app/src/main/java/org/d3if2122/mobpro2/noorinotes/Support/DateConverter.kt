@@ -18,7 +18,7 @@ class DateConverter {
     @TypeConverter
     fun fromBitmap(bitmap: Bitmap): ByteArray? {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG,10,outputStream)
         return outputStream.toByteArray()
     }
 
