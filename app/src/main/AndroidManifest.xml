@@ -26,12 +26,6 @@
             android:name=".EditNoteActivity"
             android:exported="false" />
         <activity
-            android:name=".DetailNoteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddNotesActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

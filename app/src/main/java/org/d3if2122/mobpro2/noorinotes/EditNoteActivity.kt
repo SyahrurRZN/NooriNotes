@@ -6,9 +6,8 @@ import android.app.TimePickerDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
@@ -33,15 +32,15 @@ class  EditNoteActivity : AppCompatActivity() {
     private lateinit var editNoteBinding: ActivityEditNoteBinding
     private val db by lazy { NotesDB(this) }
     private var noteId =0
-    //    private var pilihUri: Uri? =null
     private var tempUri: Uri? =null
 
     private var uriBaru: Uri?=null
-    //    private var imagepathtemp = ""
     private var readNote = false
     private var timeAwal =""
     private var timeAkhir =""
     private var dateTamppung:Date? = null
+
+    private lateinit var t:Thread
 
     private val easyPermissionManager = EasyPermissionManager(this)
 
@@ -51,14 +50,11 @@ class  EditNoteActivity : AppCompatActivity() {
         val rootView = editNoteBinding.root
         setContentView(rootView)
 
-        setView()
-        setListener()
-    }
-
-    override fun onStart() {
-        super.onStart()
+        noteId = intent.getIntExtra("note_id",0)
         timeAwal= intent.getStringExtra("awal").toString()
         timeAkhir= intent.getStringExtra("akhir").toString()
+        setView()
+        setListener()
     }
 
     private fun setListener() {
@@ -106,9 +102,7 @@ class  EditNoteActivity : AppCompatActivity() {
             }
         }
         editNoteBinding.buttonUpdate.setOnClickListener{
-            if(editNoteBinding.eJudul.text.toString().trim().isEmpty()
-                || editNoteBinding.eIsi.text.toString().trim().isEmpty()
-                || editNoteBinding.eUrlLink.text.toString().trim().isEmpty()){
+            if(editNoteBinding.eJudul.text.toString().trim().isEmpty()){
                 Toast.makeText(this, "Data tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
             else{
@@ -183,7 +177,6 @@ class  EditNoteActivity : AppCompatActivity() {
                     )
                 ){
                     uriBaru = FileProvider.getUriForFile(this,"org.d3if2122.mobpro2.noorinotes.provider", createImageFile().also{
-//                        imagepathtemp = it.absolutePath
                     })
                     cameraLauncher.launch(uriBaru)
                 }
@@ -243,32 +236,12 @@ class  EditNoteActivity : AppCompatActivity() {
     }
 
     private fun geNote() {
-        noteId = intent.getIntExtra("note_id",0)
         CoroutineScope(Dispatchers.IO).launch {
             val selectedNote = db.notesDao().getNote(noteId).get(0)
-            editNoteBinding.eJudul.setText(selectedNote.judul)
-            editNoteBinding.eIsi.setText(selectedNote.isi)
-            editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
-            editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
-            dateTamppung = selectedNote.tanggal
-//            notegambar = selectedNote.gambar
-//            imagepathtemp = selectedNote.gambar
-//            loadGambar(selectedNote.gambar)
-            if(selectedNote!=null){
-                runGetUriFavorite(selectedNote)
-            }
+
+            runGetUriFavorite(selectedNote)
         }
     }
-
-//    private fun loadGambar(gambar: Bitmap) {
-//        runOnUiThread{
-//            Picasso.get()
-//                .load(gambar)
-//                .placeholder(R.drawable.ic_baseline_image_24)
-//                .error(R.drawable.ic_baseline_broken_image_24)
-//                .into(editNoteBinding.iGambar)
-//        }
-//    }
 
     override fun onSupportNavigateUp(): Boolean {
         finish()
@@ -282,7 +255,6 @@ class  EditNoteActivity : AppCompatActivity() {
     private val selectPictureLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
         if(it != null){
             tempUri = it
-//            imagepathtemp = it.path.toString()
             loadGambarURI(it)
         }
     }
@@ -337,10 +309,14 @@ class  EditNoteActivity : AppCompatActivity() {
     private fun getBitmapDefault():Bitmap?{
         return BitmapFactory.decodeResource(resources,R.drawable.ic_baseline_image_24)
     }
-
     private fun runGetUriFavorite(selectedNote: Notes) {
-        editNoteBinding.iGambar.setImageBitmap(selectedNote.gambar)
         runOnUiThread(Runnable {
+            editNoteBinding.eJudul.setText(selectedNote.judul)
+            editNoteBinding.eIsi.setText(selectedNote.isi)
+            editNoteBinding.eUrlLink.setText(selectedNote.urlLink)
+            editNoteBinding.tTanggal.setText(selectedNote.tanggal.toString())
+            dateTamppung = selectedNote.tanggal
+
             val photo = selectedNote.gambar
 
             val file = File(applicationContext.cacheDir,"CUSTOM NAME") //Get Access to a local file.
@@ -355,7 +331,15 @@ class  EditNoteActivity : AppCompatActivity() {
             fileOutputStream.close()
             byteArrayOutputStream.close()
 
+            editNoteBinding.iGambar.setImageURI(file.toUri())
+
             tempUri = file.toUri()
         })
+    }
+}
+
+class CustomHandler(looper: Looper):Handler(looper){
+    override fun handleMessage(msg: Message) {
+        super.handleMessage(msg)
     }
 }

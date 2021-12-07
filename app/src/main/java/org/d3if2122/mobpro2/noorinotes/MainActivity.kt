@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         setupCalendar()
         setupRecyclerView()
-//        setupListener()
     }
 
     private fun setupRecyclerView() {

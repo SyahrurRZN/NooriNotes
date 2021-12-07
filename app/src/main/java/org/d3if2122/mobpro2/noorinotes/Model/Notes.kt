@@ -15,6 +15,4 @@ class Notes(
     val gambar: Bitmap?,
     val tanggal: Date?,
     val tanggalUpdate: Date
-//    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-//    val imageString : ByteArray
 )

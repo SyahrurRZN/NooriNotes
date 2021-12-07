@@ -106,15 +106,11 @@ class DayListNotesActivity : AppCompatActivity() {
         dateAwal = intent.getStringExtra("awal").toString()
         dateAkhir = intent.getStringExtra("akhir").toString()
         dateKosongan = intent.getStringExtra("kosongan").toString()
-        //supportActionBar!!.title = dateKosongan
         val formatter = SimpleDateFormat(Constants.sdf)
         val awalBanget = formatter.parse(dateAwal)
         val akhirBanget = formatter.parse(dateAkhir)
         CoroutineScope(Dispatchers.IO).launch {
             val allnotes = db.notesDao().getAllNotesbyDay(awalBanget,akhirBanget)
-            /*val allnotes2 = db.notesDao().getAllNotes()
-            Log.d("DayListNote","Data : $allnotes")
-            Log.d("DayListNote","Data2 : $allnotes2")*/
             withContext(Dispatchers.Main){
                 notesAdapter.setData(allnotes)
             }
